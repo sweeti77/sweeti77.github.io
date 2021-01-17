@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Sweeti Chauhan</title>
+    <style>
+      .main{
+        text-align:center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id='loading'>
+      Loading....
+    </div>
+    <div class="main" id="mainContainer" hidden>
+      <img height="200" weight='200' id='image'>
+      <h2 id="fullName"></h2>
+      <p id="bio"></p>
+      <!-- <h5 id="followersInfo"></h5> -->
+      <p>Check me on <a id="githubLink">Github</a></p>
+      <h3> My Awesome projects </h3>
+      <p id="projects"></p>
+    </div>
+
+
+    <script type="text/javascript">
+      fetch("https://api.github.com/users/sweeti77")
+        .then(response=>response.json())
+        .then(function(data){
+          console.log(data)
+          <!-- let followersCount = data['followers'] -->
+          <!-- let followersInformation = "$(followersCount) Awesome People follow me on Github" -->
+
+          document.getElementById('image').src = data['avatar_url']
+          document.getElementById('fullName').textContent = data['name']
+          document.getElementById('bio').textContent = data['bio']
+          <!-- document.getElementById('followersInfo').textContent = followersInformation -->
+          document.getElementById('githubLink').href = data['html_url']
+
+          // document.getElementById('projects').href = data['repos_url']
+
+
+          document.getElementById('mainContainer').hidden = false
+          document.getElementById('loading').hidden = true
+
+
+
+        })
+      fetch("https://api.github.com/users/sweeti77/repos")
+      .then(res=>res.json())
+      .then(allrepo=>{
+        let a = ''
+        allrepo.map(repo=>{
+          a += `<a href="${repo.html_url}">${repo.name}</a>` + '<br><br>'
+
+        })
+        document.getElementById('projects').innerHTML = a
+      })
+
+    </script>
+  </body>
+</html>
